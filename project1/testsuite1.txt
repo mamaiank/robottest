@@ -1,0 +1,69 @@
+*** Settings ***
+Library           SeleniumLibrary
+
+*** Variables ***
+${url}            https://opensource-demo.orangehrmlive.com/
+@{CREDENTIAL}     Admin    admin123
+&{LOGIN}          Username=Admin    Password=admin123
+
+*** Test Cases ***
+testlogin
+    Open Browser    https://opensource-demo.orangehrmlive.com/    firefox
+    Input Text    id=txtUsername    Admin
+    Input Password    id=txtPassword    admin123
+    Click Button    id=btnLogin
+
+test_login_scalar_list
+    Open Browser    ${url}    firefox
+    Input Text    id=txtUsername    @{CREDENTIAL}[0]
+    Input Password    id=txtPassword    @{CREDENTIAL}[1]
+    Click Button    id=btnLogin
+
+test_login_dic
+    [Tags]    testlogin3
+    Open Browser    ${url}    firefox
+    Input Text    id=txtUsername    &{LOGIN}[Username]
+    Input Password    id=txtPassword    &{LOGIN}[Password]
+    Click Button    id=btnLogin
+
+test_login_env
+    Open Browser    https://opensource-demo.orangehrmlive.com/    firefox
+    Input Text    id=txtUsername    Admin
+    Input Password    id=txtPassword    admin123
+    Click Button    id=btnLogin
+    Log To Console    %{username} complete succ
+
+test_login_keyword
+    Open Browser    ${url}    chrome
+    LOGIN
+
+test_google_search
+    Open Browser    https://www.google.com/    firefox
+    Input Text    name=q    Robot Framework
+    Press Keys    name=q    ENTER
+
+test_login_logout
+    Open Browser    https://opensource-demo.orangehrmlive.com/    firefox
+    Input Text    id=txtUsername    Admin
+    Input Password    id=txtPassword    admin123
+    Click Button    id=btnLogin
+    Set Browser Implicit Wait    5
+    Click Element    id=welcome
+    Click Element    link=Logout
+
+test_login_about
+    Open Browser    https://opensource-demo.orangehrmlive.com/    ff
+    Set Browser Implicit Wait    5
+    Input Text    id=txtUsername    Admin
+    Input Password    id=txtPassword    admin123
+    Click Button    id=btnLogin
+    sleep    2
+    Click Element    id=welcome
+    sleep    2
+    Click Element    link=About
+
+*** Keywords ***
+LOGIN
+    Input Text    id=txtUsername    Admin
+    Input Password    id=txtPassword    admin123
+    Click Button    id=btnLogin
